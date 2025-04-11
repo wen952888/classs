@@ -2,4 +2,4 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text("使用 /start 开始与机器人交互！")
+    await update.message.reply_text("这是帮助信息：\n使用 /start 开始使用机器人！")
