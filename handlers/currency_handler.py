@@ -3,9 +3,6 @@ from telegram.ext import ContextTypes
 from utils.currency_api import convert_currency
 
 async def handle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """
-    Handle the /convert_currency command to convert between currencies.
-    """
     if len(context.args) < 3:
         await update.message.reply_text("Usage: /convert_currency <amount> <from_currency> <to_currency>")
         return

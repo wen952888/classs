@@ -1,1 +1,1 @@
-# This file can be empty, or include any initialization code if needed.
+# This file can be left empty or used to initialize the module.

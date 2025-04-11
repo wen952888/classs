@@ -4,9 +4,6 @@ from telegram.ext import ContextTypes
 from utils.qr_code_generator import generate_qr_code
 
 async def handle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """
-    Handle the /generate_qr command to generate a QR code.
-    """
     text = " ".join(context.args)
     if not text:
         await update.message.reply_text("Please provide text or a link to generate a QR code.")
