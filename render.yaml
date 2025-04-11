@@ -1,10 +1,10 @@
 services:
   - type: web
-    name: telegram-bot
+    name: vpn-subscription-bot
     env: docker
     plan: free
     buildCommand: ""
     startCommand: ""
     envVars:
       - key: TELEGRAM_TOKEN
-        value: "你的-Telegram-Bot-Token"
+        value: "你的-Bot-Token"

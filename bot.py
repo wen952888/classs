@@ -2,40 +2,78 @@ import os
 import logging
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes
+from subscription_parser import clash, ssr, v2ray
+from utils.health_check import check_node_health
+from utils.language_support import translate
+from utils.qr_generator import generate_qr_code
 
-# 日志配置
+# 设置日志
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
 
-# 启动命令处理函数
+# 启动命令
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("欢迎使用订阅转换机器人！\n发送您的订阅链接以开始。")
+    language = update.message.from_user.language_code
+    await update.message.reply_text(
+        translate("欢迎使用订阅转换机器人！支持以下功能：\n"
+                  "- Clash、SSR、V2Ray 订阅解析\n"
+                  "- 节点健康检查\n"
+                  "- 多语言支持\n"
+                  "- 生成订阅二维码\n\n"
+                  "发送您的订阅链接以开始。", language)
+    )
 
-# 处理消息函数（订阅转换逻辑）
+# 处理订阅链接
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_message = update.message.text
+    user_message = update.message.text.strip()
+    language = update.message.from_user.language_code
 
-    # 模拟订阅转换逻辑
-    if "http" in user_message:
-        converted_message = f"转换后的订阅内容：\n{user_message.replace('http', 'https')}"
-    else:
-        converted_message = "请输入有效的订阅链接。"
+    # 检查是否为有效链接
+    if not user_message.startswith("http"):
+        await update.message.reply_text(translate("请输入有效的订阅链接（以 http/https 开头）。", language))
+        return
 
-    await update.message.reply_text(converted_message)
+    # 根据订阅格式进行处理
+    try:
+        if "clash" in user_message.lower():
+            result = clash.parse_clash_subscription(user_message)
+        elif "ssr" in user_message.lower():
+            result = ssr.parse_ssr_subscription(user_message)
+        elif "v2ray" in user_message.lower():
+            result = v2ray.parse_v2ray_subscription(user_message)
+        else:
+            result = translate("无法识别的订阅格式，请提供 Clash、SSR 或 V2Ray 格式的链接。", language)
+
+        await update.message.reply_text(result)
+
+        # 添加健康检查功能
+        if result.startswith("解析成功"):
+            health_report = check_node_health(result)
+            await update.message.reply_text(translate("节点健康检查报告：", language) + health_report)
+
+        # 生成二维码并发送
+        qr_path = generate_qr_code(user_message)
+        await update.message.reply_photo(photo=open(qr_path, 'rb'))
+        os.remove(qr_path)  # 删除临时二维码文件
+
+    except Exception as e:
+        logging.error(f"Error processing subscription: {e}")
+        await update.message.reply_text(translate("处理订阅链接时出错，请稍后再试。", language))
 
 # 主程序入口
 if __name__ == "__main__":
-    # 从环境变量中获取 Telegram Bot Token
+    # 从环境变量中获取 Telegram Token 和端口
     token = os.getenv("TELEGRAM_TOKEN")
+    port = int(os.getenv("PORT", 5000))
 
-    # 创建 Telegram Bot 应用实例
+    # 创建 Telegram Bot 实例
     app = ApplicationBuilder().token(token).build()
 
     # 添加命令和消息处理程序
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(None, handle_message))
 
-    # 开始运行
-    app.run_polling()
+    # 启动服务
+    app.run_polling(port=port, listen="0.0.0.0")
