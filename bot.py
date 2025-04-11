@@ -15,7 +15,7 @@ logging.basicConfig(
     level=logging.INFO
 )
 
-# 创建 Flask 应用
+# 创建 Flask 应用实例
 app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
