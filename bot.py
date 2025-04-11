@@ -8,7 +8,7 @@ from handlers import (
 )
 
 # Initialize the bot
-TOKEN = "your_telegram_bot_token_here"
+TOKEN = "7661820240:AAHJp_qqg9KBcswYtBIwnlTmHIPj5cH22zk"
 app = ApplicationBuilder().token(TOKEN).build()
 
 # Add command handlers
