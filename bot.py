@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 from telegram.ext import ApplicationBuilder, CommandHandler
 from handlers import (
     qr_code_handler,
@@ -8,11 +9,14 @@ from handlers import (
     permission_handler,
 )
 
-# 从环境变量中加载 Telegram Bot Token
+# 加载 .env 文件中的环境变量
+load_dotenv()
+
+# 从环境变量中获取 Telegram Bot Token
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
 if not TOKEN:
-    raise ValueError("环境变量 TELEGRAM_BOT_TOKEN 未设置！请设置有效的 Telegram Bot Token。")
+    raise ValueError("环境变量 TELEGRAM_BOT_TOKEN 未设置！请在 .env 文件中设置有效的 Telegram Bot Token。")
 
 # 初始化 Telegram Bot 应用
 app = ApplicationBuilder().token(TOKEN).build()
@@ -26,8 +30,7 @@ app.add_handler(CommandHandler("set_permission", permission_handler.handle))  # 
 
 if __name__ == "__main__":
     print("Bot is running...")
-
-    # 使用轮询（Polling）方式运行 Bot
+    # 使用轮询方式运行 Bot
     try:
         app.run_polling()
     except Exception as e:
