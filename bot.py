@@ -2,6 +2,7 @@ import os
 import logging
 from flask import Flask
 from threading import Thread
+import asyncio
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes
 from subscription_parser import clash, ssr, v2ray
@@ -81,7 +82,8 @@ def run_telegram_bot():
     telegram_app.add_handler(CommandHandler("start", start))
     telegram_app.add_handler(MessageHandler(None, handle_message))
 
-    # 运行 Telegram Bot 的轮询
+    # Explicitly create and set an asyncio event loop for this thread
+    asyncio.set_event_loop(asyncio.new_event_loop())
     telegram_app.run_polling()
 
 # Run Telegram Bot in a separate thread
