@@ -2,7 +2,6 @@ import os
 import logging
 import asyncio
 from flask import Flask
-from threading import Thread
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes
 from telegram import Update
 from subscription_parser import clash, ssr, v2ray
@@ -84,13 +83,16 @@ async def run_telegram_bot():
     await application.run_polling()
 
 
-# Main entry point: Run Flask and Telegram bot concurrently
-if __name__ == "__main__":
+# Main entry point: Manage Flask and Telegram bot in the same asyncio loop
+def main():
+    loop = asyncio.get_event_loop()
+
+    # Run Telegram Bot as a task
+    loop.create_task(run_telegram_bot())
+
+    # Run Flask app
     port = int(os.getenv("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, use_reloader=False)
 
-    # Run Flask in a separate thread
-    flask_thread = Thread(target=lambda: app.run(host="0.0.0.0", port=port))
-    flask_thread.start()
-
-    # Run Telegram Bot in the main event loop
-    asyncio.run(run_telegram_bot())
+if __name__ == "__main__":
+    main()
