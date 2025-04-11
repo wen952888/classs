@@ -1,37 +1,41 @@
 import os
-from dotenv import load_dotenv
-from telegram.ext import ApplicationBuilder, CommandHandler
-from handlers import (
-    qr_code_handler,
-    subscription_handler,
-    currency_handler,
-    rss_handler,
-    permission_handler,
+import logging
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes
+
+# 日志配置
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
 )
 
-# 加载 .env 文件中的环境变量
-load_dotenv()
+# 启动命令处理函数
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("欢迎使用订阅转换机器人！\n发送您的订阅链接以开始。")
 
-# 从环境变量中获取 Telegram Bot Token
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+# 处理消息函数（订阅转换逻辑）
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_message = update.message.text
 
-if not TOKEN:
-    raise ValueError("环境变量 TELEGRAM_BOT_TOKEN 未设置！请在 .env 文件中设置有效的 Telegram Bot Token。")
+    # 模拟订阅转换逻辑
+    if "http" in user_message:
+        converted_message = f"转换后的订阅内容：\n{user_message.replace('http', 'https')}"
+    else:
+        converted_message = "请输入有效的订阅链接。"
 
-# 初始化 Telegram Bot 应用
-app = ApplicationBuilder().token(TOKEN).build()
+    await update.message.reply_text(converted_message)
 
-# 添加命令处理程序
-app.add_handler(CommandHandler("generate_qr", qr_code_handler.handle))  # 生成二维码
-app.add_handler(CommandHandler("convert_subscription", subscription_handler.handle))  # 转换订阅链接
-app.add_handler(CommandHandler("convert_currency", currency_handler.handle))  # 货币转换
-app.add_handler(CommandHandler("rss", rss_handler.handle))  # 获取 RSS 源
-app.add_handler(CommandHandler("set_permission", permission_handler.handle))  # 设置权限
-
+# 主程序入口
 if __name__ == "__main__":
-    print("Bot is running...")
-    # 使用轮询方式运行 Bot
-    try:
-        app.run_polling()
-    except Exception as e:
-        print(f"Bot 运行时遇到错误：{e}")
+    # 从环境变量中获取 Telegram Bot Token
+    token = os.getenv("TELEGRAM_TOKEN")
+
+    # 创建 Telegram Bot 应用实例
+    app = ApplicationBuilder().token(token).build()
+
+    # 添加命令和消息处理程序
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(None, handle_message))
+
+    # 开始运行
+    app.run_polling()
