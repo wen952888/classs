@@ -15,5 +15,5 @@ def translate(text, language):
         },
     }
     if language not in translations:
-        language = "zh"  # 默认中文
+        language = "zh"
     return translations.get(language, {}).get(text, text)

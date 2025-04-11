@@ -15,12 +15,12 @@ logging.basicConfig(
     level=logging.INFO
 )
 
-# 创建 Flask 应用实例
+# 创建 Flask 应用
 app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def home():
-    """Flask 根路由，用于检查服务状态"""
+    """Flask 根路由"""
     return "Telegram Bot is running!"
 
 
@@ -42,18 +42,17 @@ async def start(update: Update, context):
 
 
 async def handle_message(update: Update, context):
-    """处理用户发送的消息"""
+    """处理用户消息"""
     user_message = update.message.text.strip()
     language = update.message.from_user.language_code or "en"
 
-    # 检查链接是否有效
     if not user_message.startswith("http"):
         invalid_message = translate("请输入有效的订阅链接（以 http/https 开头）。", language)
         await update.message.reply_text(invalid_message)
         return
 
     try:
-        # 根据订阅格式解析链接
+        # 根据链接格式解析
         if "clash" in user_message.lower():
             result = clash.parse_clash_subscription(user_message)
         elif "ssr" in user_message.lower():
@@ -63,7 +62,6 @@ async def handle_message(update: Update, context):
         else:
             result = translate("无法识别的订阅格式，请提供 Clash、SSR 或 V2Ray 格式的链接。", language)
 
-        # 回复解析结果
         await update.message.reply_text(result)
 
         # 节点健康检查
@@ -72,10 +70,10 @@ async def handle_message(update: Update, context):
             health_report_message = translate("节点健康检查报告：", language) + health_report
             await update.message.reply_text(health_report_message)
 
-        # 生成二维码并发送
+        # 生成二维码
         qr_path = generate_qr_code(user_message)
         await update.message.reply_photo(photo=open(qr_path, "rb"))
-        os.remove(qr_path)  # 删除临时文件
+        os.remove(qr_path)  # 清理临时文件
 
     except Exception as e:
         logging.error(f"Error processing subscription: {e}")
@@ -99,17 +97,8 @@ async def run_telegram_bot():
     await application.run_polling()
 
 
-def main():
-    """主函数，运行 Flask 和 Telegram Bot"""
+def start_telegram_bot():
+    """启动 Telegram Bot 轮询任务"""
     loop = asyncio.get_event_loop()
-
-    # 启动 Telegram Bot
     loop.create_task(run_telegram_bot())
-
-    # 启动 Flask 应用
-    port = int(os.getenv("PORT", 5000))  # 使用环境变量 PORT
-    app.run(host="0.0.0.0", port=port, use_reloader=False)
-
-
-if __name__ == "__main__":
-    main()
+    logging.info("Telegram Bot 已启动！")
