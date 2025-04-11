@@ -16,7 +16,7 @@ async def handle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         to_currency = context.args[2].upper()
 
         result = convert_currency(amount, from_currency, to_currency)
-        await update.message.reply_text(f"{amount} {from_currency} is approximately {result} {to_currency}.")
+        await update.message.reply_text(f"{amount} {from_currency} is approximately {result:.2f} {to_currency}.")
     except ValueError:
         await update.message.reply_text("Invalid amount. Please provide a valid number.")
     except Exception as e:
