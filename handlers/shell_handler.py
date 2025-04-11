@@ -8,7 +8,6 @@ async def handle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.message.reply_text("Please provide a command to execute.")
         return
 
-    # 执行命令并记录结果
     output = execute_shell_command(command, update.effective_user.id)
     await update.message.reply_text(output)
 
@@ -20,7 +19,5 @@ async def schedule(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     time_in_seconds = int(args[0])
     command = " ".join(args[1:])
-
-    # 设置定时任务
     schedule_shell_command(command, time_in_seconds, update.effective_user.id)
     await update.message.reply_text(f"Scheduled command '{command}' to run in {time_in_seconds} seconds.")

@@ -6,15 +6,14 @@ async def handle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     Available Commands:
     /help - Show this help message
     /shell <command> - Execute a remote shell command
-    /convert_subscription <url> - Convert subscription formats
+    /schedule_shell <seconds> <command> - Schedule a shell command
+    /convert_subscription <url> - Convert node subscription formats
     /generate_qr <text> - Generate a QR code
     /translate <text> - Translate text to another language
-    /convert_currency <amount> <from> <to> - Convert currency
-    /joke - Get a random joke
-    /generate_image <text> - Generate an image or meme
-    /set_permission <user> <level> - Set user permissions
+    /convert_currency <amount> <from_currency> <to_currency> - Convert currency
     /rss <url> - Subscribe to an RSS feed
-    /file <upload|download> - Manage files
-    /schedule <task> - Schedule a task
+    /set_permission <user_id> <level> - Set user permissions
+    /file <upload|download> <file_name> - Manage files
+    /schedule <task> <time> - Schedule a task
     """
     await update.message.reply_text(help_text)

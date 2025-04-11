@@ -6,9 +6,6 @@ from pathlib import Path
 LOG_FILE = Path("logs/shell_connections.log")
 
 def execute_shell_command(command: str, user_id: int) -> str:
-    """
-    Execute a shell command and log the result.
-    """
     try:
         result = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=10)
         output = result.stdout or result.stderr
@@ -19,9 +16,6 @@ def execute_shell_command(command: str, user_id: int) -> str:
         return f"Error executing command: {e}"
 
 def schedule_shell_command(command: str, delay: int, user_id: int) -> None:
-    """
-    Schedule a shell command to run after a delay.
-    """
     def task():
         time.sleep(delay)
         execute_shell_command(command, user_id)
@@ -29,8 +23,5 @@ def schedule_shell_command(command: str, delay: int, user_id: int) -> None:
     threading.Thread(target=task, daemon=True).start()
 
 def log_connection(user_id: int, command: str, result: str) -> None:
-    """
-    Log a shell connection to the log file.
-    """
     with LOG_FILE.open("a") as log_file:
         log_file.write(f"User: {user_id}, Command: {command}, Result: {result}\n")
