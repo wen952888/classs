@@ -1,3 +1,4 @@
+from .currency_handler import *
 from .qr_code_handler import *
 from .subscription_handler import *
 from .shell_handler import *
