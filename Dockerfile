@@ -1,16 +1,16 @@
 FROM python:3.9-slim
 
-# Set working directory
+# 设置工作目录
 WORKDIR /app
 
-# Copy all files to the container
+# 复制项目文件到容器
 COPY . .
 
-# Install dependencies
+# 安装 Python 依赖
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port
+# 暴露端口
 EXPOSE 5000
 
-# Start the application using Gunicorn
+# 使用 Gunicorn 运行 Flask 应用
 CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "bot:app"]

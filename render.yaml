@@ -7,4 +7,4 @@ services:
     startCommand: ""
     envVars:
       - key: TELEGRAM_TOKEN
-        value: "你的-Bot-Token"
+        value: "your-telegram-bot-token"
