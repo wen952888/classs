@@ -1,3 +1,4 @@
+import os
 from telegram.ext import ApplicationBuilder, CommandHandler
 from handlers import (
     qr_code_handler,
@@ -7,10 +8,13 @@ from handlers import (
     permission_handler,
 )
 
-# Telegram Bot Token (请将 "your_telegram_bot_token_here" 替换为从 @BotFather 获取的实际 Bot Token)
-TOKEN = "7661820240:AAHJp_qqg9KBcswYtBIwnlTmHIPj5cH22zk"
+# 从环境变量中加载 Telegram Bot Token
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
-# 初始化应用程序
+if not TOKEN:
+    raise ValueError("环境变量 TELEGRAM_BOT_TOKEN 未设置！请设置有效的 Telegram Bot Token。")
+
+# 初始化 Telegram Bot 应用
 app = ApplicationBuilder().token(TOKEN).build()
 
 # 添加命令处理程序
@@ -22,5 +26,9 @@ app.add_handler(CommandHandler("set_permission", permission_handler.handle))  # 
 
 if __name__ == "__main__":
     print("Bot is running...")
-    # 启动轮询以接收消息
-    app.run_polling()
+
+    # 使用轮询（Polling）方式运行 Bot
+    try:
+        app.run_polling()
+    except Exception as e:
+        print(f"Bot 运行时遇到错误：{e}")
