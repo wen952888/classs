@@ -8,3 +8,5 @@ services:
     envVars:
       - key: BOT_TOKEN
         value: "your-telegram-bot-token"
+      - key: WEBHOOK_URL
+        value: "https://your-app.onrender.com"

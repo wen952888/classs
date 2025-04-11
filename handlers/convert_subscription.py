@@ -8,7 +8,7 @@ async def convert_subscription_handler(update: Update, context: ContextTypes.DEF
         if not message.startswith("http"):
             await update.message.reply_text("请发送有效的订阅链接！")
             return
-        
+
         converted_link = message.replace("old-format", "new-format")
         await update.message.reply_text(f"转换后的订阅链接是：\n{converted_link}")
     except Exception as e:
