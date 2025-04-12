@@ -1,1 +1,1 @@
-# 空文件，仅用于标识 bot 为 Python 模块
+# 标识 bot 为 Python 模块

@@ -19,7 +19,12 @@ application = ApplicationBuilder().token(TOKEN).build()
 for handler in get_handlers():
     application.add_handler(handler)
 
-# 设置 Webhook 路由
+# 根路径处理
+@app.route("/", methods=["GET"])
+def index():
+    return "This is a Telegram bot webhook!", 200
+
+# Webhook 路由处理
 @app.route(f"/{TOKEN}", methods=["POST"])
 def webhook():
     json_data = request.get_json()
