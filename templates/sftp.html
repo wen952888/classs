@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SFTP File Management</title>
+</head>
+<body>
+    <h1>SFTP File Management</h1>
+    <form method="post">
+        <label for="hostname">Hostname:</label>
+        <input type="text" id="hostname" name="hostname" required>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <label for="keyfile">Key File Path:</label>
+        <input type="text" id="keyfile" name="keyfile">
+        <button type="submit">Connect</button>
+    </form>
+
+    <h2>Files:</h2>
+    <ul>
+    {% for file in files %}
+        <li>{{ file }}</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
