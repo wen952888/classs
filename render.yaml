@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: telegram-bot
+    env: docker
+    plan: free
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: TELEGRAM_BOT_TOKEN
+        value: "your-telegram-bot-token" # 替换为你的 Telegram bot token
