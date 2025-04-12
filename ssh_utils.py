@@ -3,7 +3,7 @@ import logging
 
 async def connect_to_ssh(account, command):
     try:
-        async with asyncssh.connect(account["host"], username=account["username"], password=account["password"]) as conn:
+        async with asyncssh.connect(account["host"], username=account["username"], password=account.get("password"), client_keys=account.get("key_path")) as conn:
             result = await conn.run(command)
             return result.stdout
     except Exception as ex:
