@@ -32,6 +32,6 @@ def webhook():
     application.process_update(update)
     return "OK", 200
 
-# Webhook 初始化函数
+# Webhook 初始化函数（可选）
 def set_webhook():
     application.bot.set_webhook(WEBHOOK_URL)
