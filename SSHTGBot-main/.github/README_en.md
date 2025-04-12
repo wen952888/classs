@@ -56,7 +56,7 @@ This project is licensed under the MIT License. Please comply with the open sour
 
 ## Project Overview
 
-SSH Master is a Telegram-based automation tool primarily designed for remote management and scheduled or manual execution of commands on multiple hosts (such as serv00). This project allows users to perform various operations through a Telegram bot interface, including SSH connections to hosts, execution of custom commands in bulk, and setting up scheduled tasks.
+SSH Master is a Telegram-based automation tool primarily designed for remote management and scheduled or manual execution of commands on multiple hosts (such as serv00). This project allows users to p[...]
 
 ### Key Features
 
@@ -103,8 +103,8 @@ We welcome you to join our Telegram discussion group. Here you can discuss usage
          "ssluser": "your_ssluser1", (SSH username)
          "password": "your_password1", (SSH password)
          "sslhost": "your_sslhost1", (SSH address, format example: "s5.serv00.com")
-         "secretkey": "private key path 1 including private key file", (Optional, used to upload private key to render, set in Secret Files under render environment variables. Format example: /etc/secrets/<filename>. For security, it's recommended to delete SSH login password and public key after setting private key and uploading public key)
-         "publickey": "public key path 1 including public key file, file extension .pub" (Optional, note no comma at the end of this line. Used to upload public key to SSH host, set in Secret Files under render environment variables. Format example: /etc/secrets/<filename>)
+         "secretkey": "private key path 1 including private key file", (Optional, used to upload private key to render, set in Secret Files under render environment variables. Format example: /etc/sec[...]
+         "publickey": "public key path 1 including public key file, file extension .pub" (Optional, note no comma at the end of this line. Used to upload public key to SSH host, set in Secret Files un[...]
        },
        {
          "customhostname": "customhostname2",
@@ -163,73 +163,3 @@ We welcome you to join our Telegram discussion group. Here you can discuss usage
 4. Start Docker in Render.
 
 Note: Render allows deployment of one free project, which may experience a 50s delay if not accessed for a long time. You can download UptimeRobot on your phone to keep it active for free.
-
-## Usage Instructions
-
-### Basic Commands
-
-- `/language` - Switch language
-- `/start` - Send this help message again (entering non-command characters will also push help)
-- `/grouprundeault` - Trigger batch execution of commands on hosts
-- `/setcron <hours>` - Set and view the cycle for executing commands (e.g., /setcron 24)
-- `/setvartime <minutes>` - Set and view the random variation range for the command execution cycle (e.g., /setvartime 10)
-- `/ssh` - List all available hosts
-- `/ssh <customhostname or ssluser@sslhost>` - Connect to the specified host
-- `/exit` - Exit the current SSH session
-- `/setcommand <command>` - Set the custom command to execute (e.g., /setcommand source ~/.profile && pm2 resurrect)
-- `/uploadkeys` - Bulk upload public keys to remote hosts (For security, it's recommended to delete SSH login password and public key after setting private key and uploading public key)
-
-### New Commands (Scheduled Task Management)
-
-- `/grouprun <command> [target]` - Execute custom command on specified hosts
-  - Example: /addtask pwd all
-  - Parameter description:
-    - `target`: Target hosts (optional, default is "all", see Host Grouping and Target Selection for specific usage)
-- `/addtask <command> <interval> <variation> [target]` - Add a new scheduled task
-  - Example: /addtask uptime 2 10 all
-  - Parameter description:
-    - `interval`: Execution interval (hours or minutes, depending on current mode)
-    - `variation`: Random variation range (minutes or seconds, depending on current mode)
-    - `target`: Target hosts (optional, default is "all", see Host Grouping and Target Selection for specific usage)
-- `/listtasks` - List all scheduled tasks
-- `/removetask <task_id>` - Remove the specified scheduled task
-- `/pausetask <task_id>` - Pause the specified scheduled task
-- `/resumetask <task_id>` - Resume the specified scheduled task
-- `/switchmode` - Switch time unit mode (hours/minutes), default is hour mode for compatibility.
-
-### Host Grouping and Target Selection
-
-When adding tasks or executing commands, you can specify target hosts in the following ways:
-
-- `all`: All hosts
-- `+N`: Select the first N hosts in ACCOUNTS_JSON (e.g., `+3`)
-- `-N`: Select the last N hosts in ACCOUNTS_JSON (e.g., `-2`)
-- `customhostname1,customhostname2,...`: Specify multiple hosts
-- `group:group_name`: Use predefined host groups (configured in CRON_TASKS_JSON)
-
-### Notes
-
-- SSH sessions have a 15-minute timeout, after which the connection will automatically disconnect.
-- All operations and execution results will be reported in real-time through the Telegram bot.
-- Please ensure your custom commands are safe and will not cause damage to the hosts.
-- The execution time of scheduled tasks may have slight deviations, this is designed to avoid all tasks executing simultaneously.
-
-## Troubleshooting
-
-If you encounter issues, please check the following points:
-
-1. Ensure all environment variables are correctly set.
-2. Check the Render logs for more detailed error information.
-3. Make sure your Telegram bot Token is valid and the bot has been added to the specified chat.
-4. Verify that the login information for the hosts is correct, including hostname, username, and password.
-5. Check if the format of ACCOUNTS_JSON and CRON_TASKS_JSON is correct, ensuring all required fields are filled.
-
-If the problem persists, please submit an issue to the project's GitHub repository.
-
-## Disclaimer
-
-This project is for educational and research purposes only. Any operations using this tool should comply with relevant laws, regulations, and service terms. Users are fully responsible for all consequences of using this tool.
-
-The developers are not responsible for any direct or indirect losses caused by the use of this tool, including but not limited to data loss, system crashes, security vulnerabilities, and other issues. By using this tool, you agree to assume all related risks.
-
-Please use this tool with caution and ensure you have permission to operate on the target hosts. Do not use this tool for illegal purposes or on unauthorized systems.
