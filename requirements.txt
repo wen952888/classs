@@ -9,7 +9,7 @@ APScheduler==3.10.1
 websockets==11.0
 asyncssh==2.13.0
 asgiref==3.7.2
-quart==0.18.4
+quart>=0.18.5
 cryptography==41.0.3
 aiohttp_cors==0.7.0
 hypercorn==0.14.3
